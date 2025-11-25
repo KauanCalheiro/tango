@@ -116,22 +116,45 @@ export function useTango(rows: number, cols: number) {
   function generateRandomRules(count: number = Math.floor((rows * cols) / 3)): void {
     clearRules()
 
+    initializeBoard()
+
+    if (!generateSolutionWithoutRules()) {
+      console.warn('Não foi possível gerar uma solução base para criar regras')
+      return
+    }
+
+    const solution: CellState[][] = []
+    for (let row = 0; row < rows; row++) {
+      solution[row] = []
+      for (let col = 0; col < cols; col++) {
+        const cell = getCell(row, col)
+        solution[row]![col] = cell?.state ?? 'empty'
+      }
+    }
+
     const possibleRules: Array<{
       row1: number
       col1: number
       row2: number
       col2: number
+      type: 'equal' | 'opposite'
     }> = []
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols - 1; col++) {
-        possibleRules.push({ row1: row, col1: col, row2: row, col2: col + 1 })
+        const state1 = solution[row]![col]
+        const state2 = solution[row]![col + 1]
+        const type: 'equal' | 'opposite' = state1 === state2 ? 'equal' : 'opposite'
+        possibleRules.push({ row1: row, col1: col, row2: row, col2: col + 1, type })
       }
     }
 
     for (let row = 0; row < rows - 1; row++) {
       for (let col = 0; col < cols; col++) {
-        possibleRules.push({ row1: row, col1: col, row2: row + 1, col2: col })
+        const state1 = solution[row]![col]
+        const state2 = solution[row + 1]![col]
+        const type: 'equal' | 'opposite' = state1 === state2 ? 'equal' : 'opposite'
+        possibleRules.push({ row1: row, col1: col, row2: row + 1, col2: col, type })
       }
     }
 
@@ -139,9 +162,97 @@ export function useTango(rows: number, cols: number) {
     const selected = shuffled.slice(0, Math.min(count, shuffled.length))
 
     for (const rule of selected) {
-      const type = Math.random() > 0.5 ? 'equal' : 'opposite'
-      addRule(rule.row1, rule.col1, rule.row2, rule.col2, type)
+      addRule(rule.row1, rule.col1, rule.row2, rule.col2, rule.type)
     }
+
+    initializeBoard()
+  }
+
+  function generateSolutionWithoutRules(): boolean {
+    let emptyCell: { row: number; col: number } | null = null
+    for (let row = 0; row < rows && !emptyCell; row++) {
+      for (let col = 0; col < cols && !emptyCell; col++) {
+        const cell = getCell(row, col)
+        if (cell?.state === 'empty') {
+          emptyCell = { row, col }
+        }
+      }
+    }
+
+    if (!emptyCell) return true
+
+    const { row, col } = emptyCell
+    const cell = getCell(row, col)
+    if (!cell) return false
+
+    const states: CellState[] = Math.random() > 0.5 ? ['sun', 'moon'] : ['moon', 'sun']
+
+    for (const state of states) {
+      if (isValidPlacementWithoutRules(row, col, state)) {
+        cell.state = state
+
+        if (generateSolutionWithoutRules()) {
+          return true
+        }
+
+        cell.state = 'empty'
+      }
+    }
+
+    return false
+  }
+
+  function isValidPlacementWithoutRules(row: number, col: number, state: CellState): boolean {
+    if (state === 'empty') return true
+
+    const cell = getCell(row, col)
+    if (!cell) return false
+
+    const originalState = cell.state
+    cell.state = state
+
+    const rowLine = board.value[row]
+    if (rowLine) {
+      for (let i = 0; i <= cols - 3; i++) {
+        const c1 = rowLine[i]?.state
+        const c2 = rowLine[i + 1]?.state
+        const c3 = rowLine[i + 2]?.state
+        if (c1 !== 'empty' && c1 === c2 && c2 === c3) {
+          cell.state = originalState
+          return false
+        }
+      }
+    }
+
+    for (let i = 0; i <= rows - 3; i++) {
+      const c1 = board.value[i]?.[col]?.state
+      const c2 = board.value[i + 1]?.[col]?.state
+      const c3 = board.value[i + 2]?.[col]?.state
+      if (c1 !== 'empty' && c1 === c2 && c2 === c3) {
+        cell.state = originalState
+        return false
+      }
+    }
+
+    if (rowLine) {
+      const sunCount = rowLine.filter(c => c.state === 'sun').length
+      const moonCount = rowLine.filter(c => c.state === 'moon').length
+      if (sunCount > cols / 2 || moonCount > cols / 2) {
+        cell.state = originalState
+        return false
+      }
+    }
+
+    const colLine = board.value.map(r => r?.[col]).filter((c): c is Cell => c !== undefined)
+    const sunCountCol = colLine.filter(c => c.state === 'sun').length
+    const moonCountCol = colLine.filter(c => c.state === 'moon').length
+    if (sunCountCol > rows / 2 || moonCountCol > rows / 2) {
+      cell.state = originalState
+      return false
+    }
+
+    cell.state = originalState
+    return true
   }
 
   function toggleCell(row: number, col: number, isRightClick: boolean = false): void {
