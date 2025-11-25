@@ -3,15 +3,12 @@ const toaster = ref({
     position: 'bottom-center',
     expand: false,
 })
-
-const { isStandalone } = useStandalone()
 </script>
 
 <template>
   <NuxtPwaAssets />
   <UApp
     :toaster="toaster"
-    :class="{ 'standalone-mode': isStandalone }"
   >
     <NuxtLayout>
       <NuxtPage />
@@ -19,9 +16,3 @@ const { isStandalone } = useStandalone()
     <PwaInstallPrompt />
   </UApp>
 </template>
-
-<style>
-.standalone-mode {
-  min-height: 100dvh;
-}
-</style>
