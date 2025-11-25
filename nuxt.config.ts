@@ -28,7 +28,6 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/tango/favicon.ico' },
         { rel: 'apple-touch-icon', href: '/tango/apple-touch-icon.png' },
-        { rel: 'manifest', href: '/tango/site.webmanifest' },
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
