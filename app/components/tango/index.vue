@@ -27,6 +27,7 @@ const {
   emptyCells,
   progress,
   toggleCell,
+  cycleCell,
   clearBoard,
   resetGame,
   setupGame,
@@ -49,6 +50,10 @@ function handleCellLeftClick(row: number, col: number): void {
 
 function handleCellRightClick(row: number, col: number): void {
   toggleCell(row, col, true)
+}
+
+function handleCellTap(row: number, col: number): void {
+  cycleCell(row, col)
 }
 
 function handleNewGame(): void {
@@ -162,6 +167,7 @@ function handleClear(): void {
           :is-line-highlighted="isLineHighlighted"
           @cell-left-click="handleCellLeftClick"
           @cell-right-click="handleCellRightClick"
+          @cell-tap="handleCellTap"
         />
       </div>
 

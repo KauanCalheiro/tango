@@ -273,6 +273,28 @@ export function useTango(rows: number, cols: number) {
     validateBoard()
   }
 
+  function cycleCell(row: number, col: number): void {
+    const cell = board.value[row]?.[col]
+    if (!cell) return
+
+    if (cell.isLocked) return
+
+    switch (cell.state) {
+      case 'empty':
+        cell.state = 'sun'
+        break
+      case 'sun':
+        cell.state = 'moon'
+        break
+      case 'moon':
+        cell.state = 'empty'
+        break
+    }
+
+    moves.value++
+    validateBoard()
+  }
+
   function setCell(row: number, col: number, state: CellState): void {
     const cell = board.value[row]?.[col]
     if (cell && !cell.isLocked) {
@@ -777,6 +799,7 @@ export function useTango(rows: number, cols: number) {
     fillRandomCells,
 
     toggleCell,
+    cycleCell,
     setCell,
 
     validateBoard,

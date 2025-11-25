@@ -20,6 +20,7 @@ const {
 const emit = defineEmits<{
   leftClick: [row: number, col: number]
   rightClick: [row: number, col: number]
+  tap: [row: number, col: number]
 }>()
 
 const cellClasses = computed(() => {
@@ -84,6 +85,10 @@ function handleLeftClick(): void {
 function handleRightClick(): void {
   emit('rightClick', cell.row, cell.col)
 }
+
+function handleTap(): void {
+  emit('tap', cell.row, cell.col)
+}
 </script>
 
 <template>
@@ -92,6 +97,7 @@ function handleRightClick(): void {
     :class="cellClasses"
     @click.left="handleLeftClick"
     @contextmenu.prevent="handleRightClick"
+    @touchend.prevent="handleTap"
   >
     <div class="flex items-center justify-center w-full h-full">
       <IconsSun

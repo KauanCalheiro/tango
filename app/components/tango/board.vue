@@ -20,6 +20,7 @@ const {
 const emit = defineEmits<{
   cellLeftClick: [row: number, col: number]
   cellRightClick: [row: number, col: number]
+  cellTap: [row: number, col: number]
 }>()
 
 const gridStyle = computed(() => ({
@@ -56,6 +57,10 @@ function handleLeftClick(row: number, col: number): void {
 function handleRightClick(row: number, col: number): void {
   emit('cellRightClick', row, col)
 }
+
+function handleTap(row: number, col: number): void {
+  emit('cellTap', row, col)
+}
 </script>
 
 <template>
@@ -75,6 +80,7 @@ function handleRightClick(row: number, col: number): void {
           :col-highlighted="isLineHighlighted('col', colIndex)"
           @left-click="handleLeftClick"
           @right-click="handleRightClick"
+          @tap="handleTap"
         />
       </template>
     </div>
