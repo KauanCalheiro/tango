@@ -80,13 +80,18 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/tango/',
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      cleanupOutdatedCaches: true,
     },
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
+    client: {
+      installPrompt: true,
+      periodicSyncForUpdates: 3600
+    },
     devOptions: {
-      enabled: false,
+      enabled: true,
       type: 'module'
     }
   }

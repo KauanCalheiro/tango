@@ -10,6 +10,7 @@ const toaster = ref({
     :toaster="toaster"
   >
     <NuxtLayout>
+      <NuxtPwaAssets />
       <NuxtPage />
     </NuxtLayout>
   </UApp>
