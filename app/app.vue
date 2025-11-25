@@ -6,11 +6,11 @@ const toaster = ref({
 </script>
 
 <template>
+  <NuxtPwaAssets />
   <UApp
     :toaster="toaster"
   >
     <NuxtLayout>
-      <NuxtPwaAssets />
       <NuxtPage />
     </NuxtLayout>
   </UApp>
