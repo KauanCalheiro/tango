@@ -7,13 +7,20 @@ useHead({
     { rel: 'icon', href: '/favicon.ico' }
   ],
   htmlAttrs: {
-    lang: 'en'
+    lang: 'pt-br'
   }
+})
+
+const toaster = ref({
+    position: 'bottom-center',
+    expand: false,
 })
 </script>
 
 <template>
-  <UApp>
+  <UApp
+    :toaster="toaster"
+  >
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

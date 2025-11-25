@@ -61,7 +61,7 @@ function handleRightClick(row: number, col: number): void {
 <template>
   <div class="flex flex-col items-center gap-4">
     <div
-      class="grid gap-2 p-4 rounded-xl"
+      class="grid gap-4 sm:p-4 rounded-xl"
       :style="gridStyle"
     >
       <template v-for="(row, rowIndex) in board" :key="rowIndex">

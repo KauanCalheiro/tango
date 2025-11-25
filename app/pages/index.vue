@@ -6,7 +6,7 @@ function handleGameCompleted(): void {
     title: 'Parabéns! 🎉',
     description: 'Você completou o Tango Game!',
     color: 'success',
-    icon: 'i-lucide-trophy'
+    icon: 'i-lucide-trophy',
   })
 }
 </script>
@@ -15,7 +15,7 @@ function handleGameCompleted(): void {
   <Tango
     :rows="6"
     :cols="6"
-    :initial-fill="33"
+    :initial-fill="5"
     @completed="handleGameCompleted"
   />
 </template>
