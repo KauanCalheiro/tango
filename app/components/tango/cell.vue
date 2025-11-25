@@ -112,7 +112,7 @@ function handleRightClick(): void {
 
     <div
       v-if="horizontalRule"
-      class="absolute -right-5 top-1/2 -translate-y-1/3 z-50"
+      class="absolute -right-4 md:-right-5 top-1/2 -translate-y-1/3 z-50"
       :class="{ 'animate-pulse': horizontalRule.isViolated }"
     >
       <IconsEqual
