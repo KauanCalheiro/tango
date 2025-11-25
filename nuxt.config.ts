@@ -14,10 +14,6 @@ export default defineNuxtConfig({
     preset: 'github-pages'
   },
 
-  app: {
-    baseURL: '/tango/',
-  },
-
   css: ['~/assets/css/main.css'],
 
   routeRules: {
@@ -26,13 +22,23 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-01-15',
 
-  eslint: {
-    config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
+  app: {
+    head: {
+      title: 'Tango',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/tango/favicon.ico' },
+        { rel: 'apple-touch-icon', href: '/tango/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/tango/site.webmanifest' },
+      ],
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'theme-color', content: '#000000' },
+        { name: 'background-color', content: '#000000' },
+      ]
+    },
+    baseURL: '/tango/',
   },
 
   pwa: {
@@ -45,7 +51,6 @@ export default defineNuxtConfig({
       background_color: '#ffffff',
       display: 'standalone',
       start_url: '/tango/',
-      scope: '/tango/',
       icons: [
         {
           src: '/tango/pwa-192x192.png',
@@ -77,12 +82,11 @@ export default defineNuxtConfig({
       navigateFallback: '/tango/',
       globPatterns: ['**/*.{js,css,html,png,svg,ico}']
     },
-    client: {
-      installPrompt: true,
-      periodicSyncForUpdates: 20
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
       type: 'module'
     }
   }
